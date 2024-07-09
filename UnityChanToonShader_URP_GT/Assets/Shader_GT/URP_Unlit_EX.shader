@@ -1,8 +1,9 @@
-Shader "Unlit/URP_Unlit_EX"
+Shader "GT/Unlit/URP_Unlit_EX"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        [MainTexture] _BaseMap("Texture", 2D) = "white" {}
+        [MainColor] _BaseColor("Base Color", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -17,7 +18,7 @@ Shader "Unlit/URP_Unlit_EX"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             
-            struct Attribute
+            struct Attributes
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
@@ -26,22 +27,29 @@ Shader "Unlit/URP_Unlit_EX"
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                float2 uv : SV_POSITION;
+                float2 uv : TEXCOORD0;
             };
 
-            Texture2D(_MainTex);
+            TEXTURE2D( _BaseMap);
             SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                half4 _BaseColor;
+            CBUFFER_END
             
-            Varyings vert(Attribute IN)
+            Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                OUT.positionHCS.xyz = TransformObjectToWorld(IN.vertex.xyz);
+                OUT.positionHCS = TransformObjectToHClip(IN.vertex.xyz);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
             }
 
-            half4 frag(Varyings IN)
+            half4 frag(Varyings IN) : SV_Target
             {
-                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_BaseMap, IN.uv);
+                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv);
+                color *= _BaseColor;
                 return color;
             }
 
