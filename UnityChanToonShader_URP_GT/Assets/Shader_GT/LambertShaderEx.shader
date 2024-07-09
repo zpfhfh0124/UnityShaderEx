@@ -60,8 +60,11 @@ Shader "GT/BRDF/LambertShaderEx"
                 half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
                 color *= _BaseColor;
 
-                // 라이트 계산
-                
+                // 라이트 계산 적용
+                float NdotL = saturate(dot(IN.lightDir, IN.normal)); // saturate : 0 이하는 0으로 조정. dot : 두 벡터의 내적을 계산
+                half3 ambient = SampleSH(IN.normal); // 노멀 방향의 GI 컬러 정보
+                half3 lighting = NdotL * _MainLightColor.rgb + ambient;
+                color.rgb *= lighting;
                 return color;
             }
             ENDHLSL
