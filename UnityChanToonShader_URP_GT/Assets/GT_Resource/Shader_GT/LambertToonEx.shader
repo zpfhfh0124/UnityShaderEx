@@ -37,23 +37,27 @@ Shader "GT/BRDF/LambertToonEx"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
-            half4 _BaseColor;
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST;
+                half4 _BaseColor;
+            CBUFFER_END
 
             Varyings vert (Attributes IN)
             {
                 Varyings OUT;
                 OUT.vertex = TransformObjectToHClip(IN.vertex);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
+                OUT.normal = normalize(TransformObjectToWorldNormal(IN.normal));
                 return OUT;
             }
 
-            half4 frag (Varyings i) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
-                return col;
+                Light mainLight = GetMainLight(dot(mainLight.direction.xyz, IN.normal) * 0.5f + 0.5f);
+                half4 Color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                
+                return Color;
             }
             ENDHLSL
         }
