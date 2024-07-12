@@ -8,14 +8,13 @@ Shader "GT/BRDF/LambertToonEx"
     SubShader
     {
         Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" }
-        LOD 100
+        //LOD 100
 
         Pass
         {
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -54,10 +53,12 @@ Shader "GT/BRDF/LambertToonEx"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                Light mainLight = GetMainLight(dot(mainLight.direction.xyz, IN.normal) * 0.5f + 0.5f);
-                half4 Color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                Light mainLight = GetMainLight();
+                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+
+                color *= _BaseColor;
                 
-                return Color;
+                return color;
             }
             ENDHLSL
         }
