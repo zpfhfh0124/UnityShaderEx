@@ -1,4 +1,4 @@
-Shader "GT/BRDF/LambertShaderEx"
+Shader "GT/LambertShaderEx"
 {
     Properties
     {

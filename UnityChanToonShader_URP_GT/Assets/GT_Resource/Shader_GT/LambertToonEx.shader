@@ -1,15 +1,13 @@
-Shader "GT/BRDF/LambertToonEx"
+Shader "GT/LambertToonEx"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _BaseColor ("BaseColor", Color) = (1,1,1,1)
+        _LambertThresh("LambertThresh", float) = 0.5
     }
     SubShader
     {
         Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" }
-        //LOD 100
-
         Pass
         {
             HLSLPROGRAM
@@ -38,14 +36,16 @@ Shader "GT/BRDF/LambertToonEx"
             SAMPLER(sampler_MainTex);
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
-                half4 _BaseColor;
+            float4 _MainTex_ST;
+            float _LambertThresh;
             CBUFFER_END
 
             Varyings vert (Attributes IN)
             {
                 Varyings OUT;
-                OUT.vertex = TransformObjectToHClip(IN.vertex);
+                // 입력 버텍스 좌표
+                VertexPositionInputs inputs = GetVertexPositionInputs(IN.vertex.xyz);
+                OUT.vertex = inputs.positionCS;
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
                 OUT.normal = normalize(TransformObjectToWorldNormal(IN.normal));
                 return OUT;
@@ -55,9 +55,13 @@ Shader "GT/BRDF/LambertToonEx"
             {
                 Light mainLight = GetMainLight();
                 half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-
-                color *= _BaseColor;
                 
+                // 노말 벡터 내적 -> 0 ~ 1 정규화
+                float uNormalDot = saturate(dot(mainLight.direction.xyz, IN.normal)*0.5f + 0.5f);
+                // uNormalDot < _LambertThresh ? 1 : 0
+                float ramp = step(uNormalDot, _LambertThresh);
+                // mainLight.color
+                color.rgb = lerp(color, color * mainLight.color, ramp);
                 return color;
             }
             ENDHLSL

@@ -30,7 +30,7 @@ Shader "GT/Unlit/URP_Unlit_EX"
                 float2 uv : TEXCOORD0;
             };
 
-            TEXTURE2D( _BaseMap);
+            TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
 
             CBUFFER_START(UnityPerMaterial)

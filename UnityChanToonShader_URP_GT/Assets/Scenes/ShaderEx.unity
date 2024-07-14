@@ -455,8 +455,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 794565941}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.55, z: 1.6}
+  m_LocalRotation: {x: -0.0018259254, y: 0.9975038, z: -0.06473905, w: -0.028136298}
+  m_LocalPosition: {x: -0.8546437, y: 1.1674216, z: 1.6700287}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1293,7 +1293,7 @@ PrefabInstance:
     - target: {fileID: 2010118488525630116, guid: c1407af8e4c3918438a62120b849862e,
         type: 3}
       propertyPath: m_Name
-      value: GT_Girl01
+      value: ToonShader_VRM_Girl
       objectReference: {fileID: 0}
     - target: {fileID: 4038440664568471650, guid: c1407af8e4c3918438a62120b849862e,
         type: 3}
