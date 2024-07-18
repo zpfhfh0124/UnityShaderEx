@@ -3,8 +3,17 @@ Shader "Hidden/Custom/UIShinyCustom (UIShiny)"
     Properties
     {
         /*[PerRendererData] */_MainTex ("Main Texture", 2D) = "white" {}  // 메인 텍스처 속성
+        _Color ("Color", Color) = (1,1,1,1)
         
         _AlphaCutOff ("Alpha Cut Off", Range(0,1)) = 0.5
+        
+        _StencilComp ("Stencil Comparison", Float) = 8
+        _Stencil ("Stencil ID", Float) = 0
+        _StencilOp ("Stencil Operation", Float) = 0
+        _StencilWriteMask ("Stencil Write Mask", Float) = 255
+        _StencilReadMask ("Stencil Read Mask", Float) = 255
+        
+        _ColorMask ("Color Mask", Float) = 15
         
         _ParamTex ("Parameter Texture", 2D) = "white" {} // 파라미터 텍스쳐
     }
