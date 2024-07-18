@@ -1,113 +1,73 @@
-Shader "Hidden/Custom/UIShinyCustom (UIShiny)"
+Shader "Custom/UIShinyCustom (UIShiny)"
 {
     Properties
     {
-        [PerRendererData] _MainTex ("Texture", 2D) = "white" {}
-        _Color ("Tint", Color) = (1,1,1,1)
+        /*[PerRendererData] */_MainTex ("Main Texture", 2D) = "white" {}  // 메인 텍스처 속성
         
-        _StencilComp ("Stencil Comparison", Float) = 8
-        _Stencil ("Stencil ID", Float) = 0
-        _StencilOp ("Stencil Operation", Float) = 0
-        _StencilWriteMask ("Stencil Write Mask", Float) = 255
-        _StencilReadMask ("Stencil Read Mask", Float) = 255
-        
-        _ColorMask ("Color Mask", Float) = 0
-        
-        _ParamTex ("Parameter Texture", 2D) = "white" {}
+        _ParamTex ("Parameter Texture", 2D) = "white" {} // 파라미터 텍스쳐
     }
     SubShader
     {
-        Tags
+        Tags 
         {
-            "Queue"="Transparent"
-            "RenderType"="Transparent"
-            "RenderPipeline"="UnivarsalRenderPipeline"
-            "IgnoreProjector"="True"
-            "CanUseSpriteAltas"="True"
-            "PreviewType"="Plane"
+            "Queue"="Transparent" 
+            "IgnoreProjector"="True" 
+            "RenderType"="Transparent" 
+            "PreviewType"="Plane" 
+            "RenderPipeline"="UniversalPipeline" 
         }
-        
-        stencil
-        {
-            Ref [_MainTex]
-            Comp [_StencilComp]
-            Pass [_StencilOp]
-            ReadMask [_StencilReadMask]
-            WriteMask [_StencilWriteMask]
-        }
-        
-        Cull Off
-        Lighting Off
-        ZWrite Off
-        ZTest [unity_GUIZTestMode]
-        Blend SrcAlpha OneMinusSrcAlpha
-        ColorMask [_ColorMask]
-        
         Pass
         {
             HLSLPROGRAM
-
             #pragma vertex vert
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-            #include "Assets/Scripts/UIEffect.hlsl"
+            #include "Assets/Scripts/UIEffectCustom.hlsl"
             
-            struct Attributes
-            {
-                float4 vertex   : POSITION;
-                float4 color    : COLOR;
-                float2 uv       : TEXCOORD1;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct Varying
-            {
-                float4 vertex   : ST_POSITION;
-                float2 uv       : TEXCOORD0;
-                float2 worldPos : TEXCOORD1;
-                half2 param     : TEXCOORD2;
-                half4 uvMask    : TEXCOORD3;
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
-
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
-            CBUFFER_START(UnityPerMatrial)
-            float4 _TextureSampleAdd;
+            half4 _Color;
+            half4 _TextureSampleAdd;
             float4 _ClipRect;
-            CBUFFER_END
+            float4 _MainTex_TexelSize;
 
-            float UnityGet2DClipping (in float2 position, in float4 clipRect)
+            struct Attributes
             {
-                float2 inside = step(clipRect.xy, position.xy) * step(position.xy, clipRect.zw);
-                return inside.x * inside.y;
-            }
-            
-            Varying vert(Attributes IN)
-            {
-                Varying OUT;
-                UNITY_SETUP_INSTANCE_ID(IN);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
-                OUT.worldPos = IN.vertex;
-                OUT.vertex = TransformObjectToHClip(IN.vertex.xyz);
-                OUT.uv = UnpackToVec2(IN.uv.x) * 2 - 0.5;
-                OUT.param = UnpackToVec2(IN.uv.y);
+                float4 vertex   : POSITION;
+                float2 texcoord : TEXCOORD0;
+                float4 color    : COLOR;
+            };
 
-                return OUT;
-            }
-            
-            float4 frag(Varying IN) : SV_Target
+            struct Varyings
             {
-                float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-                color.a *= UnityGet2DClipping(IN.worldPos.xy, _ClipRect);
+                float4 vertex        : SV_POSITION;
+                half4 color          : COLOR;
+                float4 texcoord      : TEXCOORD0;
+                float4 worldPosition : TEXCOORD1;
+                half2 param          : TEXCOORD2;
+            };
+
+            Varyings vert(Attributes i)
+            {
+                Varyings o;
+                o.vertex = TransformObjectToHClip(i.vertex);
+                o.worldPosition = i.vertex;
+                o.param = UnpackToVec2(i.texcoord.y);
+                return o;
+            }
+
+            half4 frag(Varyings i) : SV_Target
+            {
+                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
+                color = ApplyShinyEffect(color, i.param);
                 
                 return color;
             }
-            
             ENDHLSL
         }
     }
+    FallBack "UI/Default"
 }

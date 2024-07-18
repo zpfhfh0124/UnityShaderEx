@@ -1,5 +1,7 @@
 #define UI_EFFECT
 
+sampler2D _ParamTex;
+
 // Unpack float to low-precision [0-1] fixed4.
 float4 UnpackToVec4(float value)
 {
@@ -108,16 +110,18 @@ half4 ApplyShinyEffect(half4 color, half2 shinyParam)
 	const float PARAM1_POS_X = 0.25; 
 	const float PARAM2_POS_X = 0.75; 
 	float normalizedPos = shinyParam.x;
-	float4 param1;
-	float4 param2;
-	half location;
-	float width;
-	float soft;
-	float brightness;
-	float gloss;
-	half normalized;
-	half shinePower;
-	half3 reflectColor;
+	float4 param1 = tex2D(_ParamTex, float2(PARAM1_POS_X, shinyParam.y));
+	float4 param2 = tex2D(_ParamTex, float2(PARAM2_POS_X, shinyParam.y));
+	half location = param1.x * 2 - 0.5;
+	float width = param1.y;
+	float soft = param1.z;
+	float brightness = param1.w;
+	float gloss = param2.x;
+	half normalized = 1 - saturate(abs((normalizedPos - location) / width));
+	half shinePower = smoothstep(0, soft, normalized); // min, max, input -> 색을 부드럽게 그라데이션을 만들어준다.
+	half3 reflectColor = lerp(float3(1,1,1), color.rgb, gloss); // a, b, input -> a와 b사이를 보간하여 input의 값이 a ~ b 사이의 위치하는 값을 도출
 
+	color.rgb += color.a * (shinePower / 2) * brightness + reflectColor; // 알파값, 발광 강도, 밝기, 반사 색상 연산 적용
+	
 	return color;
 }
