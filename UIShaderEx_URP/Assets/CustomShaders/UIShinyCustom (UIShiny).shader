@@ -1,8 +1,10 @@
-Shader "Custom/UIShinyCustom (UIShiny)"
+Shader "Hidden/Custom/UIShinyCustom (UIShiny)"
 {
     Properties
     {
         /*[PerRendererData] */_MainTex ("Main Texture", 2D) = "white" {}  // 메인 텍스처 속성
+        
+        _AlphaCutOff ("Alpha Cut Off", Range(0,1)) = 0.5
         
         _ParamTex ("Parameter Texture", 2D) = "white" {} // 파라미터 텍스쳐
     }
@@ -33,6 +35,7 @@ Shader "Custom/UIShinyCustom (UIShiny)"
             half4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_TexelSize;
+            float _AlphaCutOff;
 
             struct Attributes
             {
@@ -45,7 +48,7 @@ Shader "Custom/UIShinyCustom (UIShiny)"
             {
                 float4 vertex        : SV_POSITION;
                 half4 color          : COLOR;
-                float4 texcoord      : TEXCOORD0;
+                float2 texcoord      : TEXCOORD0;
                 float4 worldPosition : TEXCOORD1;
                 half2 param          : TEXCOORD2;
             };
@@ -54,6 +57,8 @@ Shader "Custom/UIShinyCustom (UIShiny)"
             {
                 Varyings o;
                 o.vertex = TransformObjectToHClip(i.vertex);
+                o.color = UnpackToVec4(i.color);
+                o.texcoord = i.texcoord;
                 o.worldPosition = i.vertex;
                 o.param = UnpackToVec2(i.texcoord.y);
                 return o;
@@ -63,6 +68,10 @@ Shader "Custom/UIShinyCustom (UIShiny)"
             {
                 half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
                 color = ApplyShinyEffect(color, i.param);
+
+                // 알파 클리핑
+                if (color.a < _AlphaCutOff)
+                    discard;
                 
                 return color;
             }

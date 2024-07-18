@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UIShinyCustom
-  m_Shader: {fileID: 4800000, guid: eca6ffc7fd4f2724ea8dc36c4f5d1488, type: 3}
+  m_Shader: {fileID: 4800000, guid: 56cf1679db47a274d9603501e61fda72, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -86,6 +86,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0
+    - _AlphaCutOff: 0
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
