@@ -1,6 +1,6 @@
 Shader "Custom/UIShinyCustom"
 {
-     Properties
+    Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
     }

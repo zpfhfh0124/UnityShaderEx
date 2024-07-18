@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UIShinyCustom
-  m_Shader: {fileID: 4800000, guid: 2cf8d397a2c0b0e458c8ed8b3499a9ce, type: 3}
+  m_Shader: {fileID: 4800000, guid: 56cf1679db47a274d9603501e61fda72, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
