@@ -32,8 +32,8 @@
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.8.4",
-        "com.unity.modules.unityanalytics": "1.0.0",
-        "com.unity.nuget.mono-cecil": "1.11.4"
+        "com.unity.nuget.mono-cecil": "1.11.4",
+        "com.unity.modules.unityanalytics": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -49,8 +49,8 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.uielements": "1.0.0",
-        "com.unity.timeline": "1.2.18"
+        "com.unity.timeline": "1.2.18",
+        "com.unity.modules.uielements": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -181,9 +181,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -193,8 +193,8 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.film-internal-utilities": "0.18.4-preview",
-        "com.unity.render-pipelines.core": "10.0.0"
+        "com.unity.render-pipelines.core": "10.0.0",
+        "com.unity.film-internal-utilities": "0.18.4-preview"
       },
       "url": "https://packages.unity.com"
     },
@@ -240,9 +240,9 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.subsystems": "1.0.0",
         "com.unity.modules.vr": "1.0.0",
         "com.unity.modules.xr": "1.0.0",
+        "com.unity.modules.subsystems": "1.0.0",
         "com.unity.xr.legacyinputhelpers": "2.1.7"
       },
       "url": "https://packages.unity.com"
@@ -286,52 +286,41 @@
       }
     },
     "com.vrmc.gltf": {
-      "version": "0.121.0",
+      "version": "0.127.0",
       "depth": 2,
       "source": "registry",
       "dependencies": {
-        "com.vrmc.vrmshaders": "0.121.0",
         "com.unity.modules.animation": "1.0.0"
       },
       "url": "https://package.openupm.com"
     },
     "com.vrmc.univrm": {
-      "version": "0.121.0",
+      "version": "0.127.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.vrmc.vrmshaders": "0.121.0",
-        "com.vrmc.gltf": "0.121.0",
+        "com.vrmc.gltf": "0.127.0",
         "com.unity.ugui": "1.0.0"
       },
       "url": "https://package.openupm.com"
     },
-    "com.vrmc.vrmshaders": {
-      "version": "0.121.0",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.imageconversion": "1.0.0"
-      },
-      "url": "https://package.openupm.com"
-    },
     "jp.pokemori.univrm-extensions": {
-      "version": "10.1.0",
+      "version": "10.3.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.vrmc.univrm": "0.121.0"
+        "com.vrmc.univrm": "0.127.0"
       },
       "url": "https://package.openupm.com"
     },
     "jp.pokemori.vrm-converter-for-vrchat": {
-      "version": "41.1.0",
+      "version": "41.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.vrchat.avatars": "3.5.0",
-        "com.vrmc.univrm": "0.121.0",
-        "jp.pokemori.univrm-extensions": "10.1.0"
+        "com.vrmc.univrm": "0.127.0",
+        "jp.pokemori.univrm-extensions": "10.3.0"
       },
       "url": "https://package.openupm.com"
     },
