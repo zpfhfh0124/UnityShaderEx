@@ -21,9 +21,8 @@ namespace UnityChan
 		private AnimatorStateInfo previousState;	// ひとつ前のステート状態を保存する参照
 		public bool _random = false;				// ランダム判定スタートスイッチ
 		public float _threshold = 0.5f;				// ランダム判定の閾値
-		public float _interval = 10f;               // ランダム判定のインターバル
-        //private float _seed = 0.0f;					// ランダム判定用シード
-        public bool isGUI = true;
+		public float _interval = 10f;				// ランダム判定のインターバル
+		//private float _seed = 0.0f;					// ランダム判定用シード
 	
 
 
@@ -76,14 +75,11 @@ namespace UnityChan
 
 		void OnGUI ()
 		{
-            if (isGUI)
-            {
-                GUI.Box(new Rect(Screen.width - 110, 10, 100, 90), "Change Motion");
-                if (GUI.Button(new Rect(Screen.width - 100, 40, 80, 20), "Next"))
-                    anim.SetBool("Next", true);
-                if (GUI.Button(new Rect(Screen.width - 100, 70, 80, 20), "Back"))
-                    anim.SetBool("Back", true);
-            }
+			GUI.Box (new Rect (Screen.width - 110, 10, 100, 90), "Change Motion");
+			if (GUI.Button (new Rect (Screen.width - 100, 40, 80, 20), "Next"))
+				anim.SetBool ("Next", true);
+			if (GUI.Button (new Rect (Screen.width - 100, 70, 80, 20), "Back"))
+				anim.SetBool ("Back", true);
 		}
 
 
