@@ -8,20 +8,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: N00_001_02_Accessory_Tie_01_CLOTH (Instance)
-  m_Shader: {fileID: 4800000, guid: 31d5eb384d6448f4b9a8dceefd9f6860, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1a97144e4ad27a04aafd70f7b915cedb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - MTOON_OUTLINE_COLOR_FIXED
   - MTOON_OUTLINE_WIDTH_WORLD
   - _ALPHATEST_ON
   - _NORMALMAP
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -77,7 +78,6 @@ Material:
     - _DebugMode: 0
     - _DstBlend: 0
     - _IndirectLightIntensity: 0.1
-    - _LambertThresh: 0.5
     - _LightColorAttenuation: 0
     - _MToonVersion: 39
     - _OutlineColorMode: 0
@@ -105,3 +105,4 @@ Material:
     - _RimColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
     - _ShadeColor: {r: 0.96999997, g: 0.81, b: 0.86, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

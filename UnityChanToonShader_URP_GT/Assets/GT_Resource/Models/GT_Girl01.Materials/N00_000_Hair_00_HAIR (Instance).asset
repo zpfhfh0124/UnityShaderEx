@@ -8,20 +8,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: N00_000_Hair_00_HAIR (Instance)
-  m_Shader: {fileID: 4800000, guid: 31d5eb384d6448f4b9a8dceefd9f6860, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1a97144e4ad27a04aafd70f7b915cedb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - MTOON_OUTLINE_COLOR_MIXED
   - MTOON_OUTLINE_WIDTH_WORLD
   - _ALPHATEST_ON
   - _NORMALMAP
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -77,7 +78,6 @@ Material:
     - _DebugMode: 0
     - _DstBlend: 0
     - _IndirectLightIntensity: 0.1
-    - _LambertThresh: 0.5
     - _LightColorAttenuation: 0
     - _MToonVersion: 39
     - _OutlineColorMode: 1
@@ -99,10 +99,10 @@ Material:
     - _UvAnimScrollY: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0.85882354, g: 0.5411765, b: 0.23137255, a: 1}
     - _OutlineColor: {r: 0.27450973, g: 0.09019599, b: 0.1254901, a: 1}
     - _RimColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
     - _ShadeColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
