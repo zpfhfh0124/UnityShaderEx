@@ -29,7 +29,8 @@ Shader "GT/CelLightingToonShader"
             // make fog work
             #pragma multi_compile_fog
 
-            #include "UnityCG.cginc"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             struct appdata
             {
@@ -41,43 +42,47 @@ Shader "GT/CelLightingToonShader"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
-                float3 worldNormal : NORMAL;
+                float3 worldNormal : TEXCOORD1;
+                float4 worldPos : TEXCOORD2;
             };
 
-            sampler2D _MainTex;
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
             float _FallOffStepValue;
 
             float3 _RimColor;
             float _RimOpacity;
             float _RimColorIntensity;
 
+            float3 _WorldSpaceLightPos0;
+
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.vertex = TransformObjectToHClip(v.vertex);
+                o.worldNormal = TransformObjectToWorldNormal(v.normal);
                 o.uv = v.uv;
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex);
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            half4 frag (v2f i) : SV_Target
             {
                 // lighting
                 float lighting = saturate(dot(i.worldNormal, _WorldSpaceLightPos0.xyz)); // 월드 노멀 백터와 디렉셔널 라이트의 내적을 0~1로 clamp
                 float fallOff = 1.0 - step(lighting, _FallOffStepValue); // lighting이 _FallOffStepValue보다 크거나 같으면 1, 아니면 0
                 
-                float4 col = tex2D(_MainTex, i.uv);
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 // RimColor
                 col.rgb = lerp(col.rgb, lerp(col.rgb, col.rgb + col.rgb * _RimColor * _RimColorIntensity, _RimOpacity), fallOff);
                 
                 // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                //ApplyFog(i.fogCoord, col);
                 return col;
             }
             ENDHLSL
         }
     }
 }
+
