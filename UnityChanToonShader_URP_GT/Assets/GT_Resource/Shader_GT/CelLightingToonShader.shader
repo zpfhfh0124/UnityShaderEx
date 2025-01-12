@@ -8,17 +8,15 @@ Shader "GT/CelLightingToonShader"
         
         [Header(FallOff)]
         _FallOffStepValue("FallOffStepValue", Range(0,1)) = 0.5
+        
         [Header(Rim)]
         _RimColorIntensity("RimColorIntensity", float) = 1.0
         _RimOpacity("RimOpacity", Range(0,1)) = 1.0
     }
     
-    // lighting
-    
-    
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque" "LightMode"="UniversalForward" }
         LOD 100
 
         Pass
@@ -28,9 +26,11 @@ Shader "GT/CelLightingToonShader"
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
+            #pragma multi_compile _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOW_CASCADE
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
             struct appdata
             {
@@ -45,6 +45,7 @@ Shader "GT/CelLightingToonShader"
                 float4 vertex : SV_POSITION;
                 float3 worldNormal : TEXCOORD1;
                 float4 worldPos : TEXCOORD2;
+                float4 shadowCoord : TEXCOORD3;
             };
 
             TEXTURE2D(_MainTex);
@@ -64,6 +65,11 @@ Shader "GT/CelLightingToonShader"
                 o.worldNormal = TransformObjectToWorldNormal(v.normal);
                 o.uv = v.uv;
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+
+                #ifdef _MAIN_LIGHT_SHADOWS
+                o.shadowCoord = TransformWorldToShadowCoord(o.worldPos);
+                #endif
+                
                 return o;
             }
 
@@ -74,11 +80,18 @@ Shader "GT/CelLightingToonShader"
                 float fallOff = 1.0 - step(lighting, _FallOffStepValue); // lighting이 _FallOffStepValue보다 크거나 같으면 1, 아니면 0
                 
                 float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                
                 // RimColor
                 col.rgb = lerp(col.rgb, lerp(col.rgb, col.rgb + col.rgb * _RimColor * _RimColorIntensity, _RimOpacity), fallOff);
                 
-                // apply fog
-                //ApplyFog(i.fogCoord, col);
+                // Shadows
+                #ifdef _MAIN_LIGHT_SHADOWS
+                float shadowAttenuation = MainLightRealtimeShadow(i.shadowCoord);
+                lighting *= shadowAttenuation;
+                #endif
+
+                col.rgb *= lighting;
+                
                 return col;
             }
             ENDHLSL
